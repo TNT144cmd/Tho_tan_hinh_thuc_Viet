@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: tho-tan-hinh-thuc-viet
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: FLASK_ENV
+        value: productions

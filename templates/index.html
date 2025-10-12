@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+</ul>
+</section>
+
+<!-- Tác phẩm -->
+<section id="tacpham" class="section container">
+<h2>Tác phẩm</h2>
+<div class="grid">
+<article class="card">
+<h3>Bài thơ A</h3>
+<p>Đoạn trích ngắn…</p>
+</article>
+<article class="card">
+<h3>Bài thơ B</h3>
+<p>Đoạn trích ngắn…</p>
+</article>
+<article class="card">
+<h3>Bài thơ C</h3>
+<p>Đoạn trích ngắn…</p>
+</article>
+</div>
+</section>
+
+
+<!-- Đánh giá -->
+<section id="danhgia" class="section container">
+<h2>Đánh giá</h2>
+<p>Trích dẫn vài nhận xét tiêu biểu từ độc giả & nhà phê bình (bạn có thể thay nội dung sau).</p>
+</section>
+
+
+<!-- Bình luận -->
+<section id="binhluan" class="section container">
+<h2>Bình luận</h2>
+
+
+<form class="comment-form" action="{{ url_for('comment') }}" method="post">
+<div class="row">
+<label for="name">Tên</label>
+<input type="text" id="name" name="name" placeholder="Tên của bạn (tuỳ chọn)" />
+</div>
+<div class="row">
+<label for="content">Nội dung</label>
+<textarea id="content" name="content" rows="4" placeholder="Hãy để lại lời nhắn…" required></textarea>
+</div>
+<button type="submit" class="btn">Gửi bình luận</button>
+</form>
+
+
+{% if comments %}
+<ul class="comments">
+{% for c in comments %}
+<li class="comment">
+<div class="comment-meta">
+<strong>{{ c.name }}</strong>
+<span>• {{ c.created_at }}</span>
+</div>
+<p>{{ c.content }}</p>
+</li>
+{% endfor %}
+</ul>
+{% else %}
+<p class="muted">Chưa có bình luận nào. Hãy là người đầu tiên!</p>
+{% endif %}
+</section>
+</main>
+{% endblock %}
