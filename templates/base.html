@@ -1,35 +1,33 @@
 <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>{% block title %}Thơ tân hình thức Việt{% endblock %}</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Thơ Tân hình thức Việt{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body>
-<header class="navbar">
-<div class="container nav-inner">
-<div class="brand"><a href="#top">Thơ tân hình thức Việt</a></div>
-<nav>
-<a href="#gioithieu">Giới thiệu</a>
-<a href="#tacgia">Tác giả</a>
-<a href="#tacpham">Tác phẩm</a>
-<a href="#danhgia">Đánh giá</a>
-</nav>
-</div>
-</header>
+  <header class="navbar">
+    <div class="container nav-inner">
+      <div class="brand"><a href="#top">Thơ Tân hình thức Việt</a></div>
+      <nav>
+        <a href="#gioithieu">Giới thiệu</a>
+        <a href="#tacgia">Tác giả</a>
+        <a href="#tacpham">Tác phẩm</a>
+        <a href="#danhgia">Đánh giá</a>
+      </nav>
+    </div>
+  </header>
 
+  {% block content %}{% endblock %}
 
-{% block content %}{% endblock %}
-
-
-<footer class="footer">
-<div class="container">
-<p>© {% raw %}{{% endraw %} 2025 {% raw %}}{% endraw %} Thơ tân hình thức Việt • Một dự án văn học số</p>
-</div>
-</footer>
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; Thơ Tân hình thức Việt • Một dự án văn học số</p>
+    </div>
+  </footer>
 </body>
 </html>

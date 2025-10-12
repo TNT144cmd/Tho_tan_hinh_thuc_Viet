@@ -1,67 +1,95 @@
 {% extends 'base.html' %}
-</ul>
-</section>
+{% block title %}Thơ Tân hình thức Việt{% endblock %}
 
-<!-- Tác phẩm -->
-<section id="tacpham" class="section container">
-<h2>Tác phẩm</h2>
-<div class="grid">
-<article class="card">
-<h3>Bài thơ A</h3>
-<p>Đoạn trích ngắn…</p>
-</article>
-<article class="card">
-<h3>Bài thơ B</h3>
-<p>Đoạn trích ngắn…</p>
-</article>
-<article class="card">
-<h3>Bài thơ C</h3>
-<p>Đoạn trích ngắn…</p>
-</article>
-</div>
-</section>
+{% block content %}
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    .hero { background-image: url("/static/hero.jpg"); }
 
+  >
+    <div class="hero-overlay">
+      <h1 class="hero-title">Thơ Tân hình thức Việt</h1>
+      <p class="hero-subtitle">Để những vầng thơ khắc họa tâm hồn bạn.</p>
+    </div>
+  </section>
 
-<!-- Đánh giá -->
-<section id="danhgia" class="section container">
-<h2>Đánh giá</h2>
-<p>Trích dẫn vài nhận xét tiêu biểu từ độc giả & nhà phê bình (bạn có thể thay nội dung sau).</p>
-</section>
+  <!-- Giới thiệu -->
+  <section id="gioithieu" class="section container">
+    <h2>Giới thiệu</h2>
+    <p>
+      Chào mừng bạn đến với khung trời của <em>Thơ Tân hình thức Việt</em> — một dự án văn học số dành riêng cho việc khám phá và chia sẻ những tác phẩm thơ hiện đại mang đậm dấu ấn Việt Nam. 
+      Tại đây, bạn có thể tìm đọc các bài thơ đặc sắc, tìm hiểu về các tác giả
+      đồng thời có thể tham gia hoặc tham khảo đánh giá từ cộng đồng yêu thơ.
+    </p>
+  </section>
 
+  <!-- Tác giả -->
+  <section id="tacgia" class="section container">
+    <h2>Tác giả</h2>
+    <ul class="card-list">
+      <li class="card">Tên tác giả 1</li>
+      <li class="card">Tên tác giả 2</li>
+      <li class="card">Tên tác giả 3</li>
+    </ul>
+  </section>
 
-<!-- Bình luận -->
-<section id="binhluan" class="section container">
-<h2>Bình luận</h2>
+  <!-- Tác phẩm -->
+  <section id="tacpham" class="section container">
+    <h2>Tác phẩm</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>Bài thơ A</h3>
+        <p>Đoạn trích ngắn…</p>
+      </article>
+      <article class="card">
+        <h3>Bài thơ B</h3>
+        <p>Đoạn trích ngắn…</p>
+      </article>
+      <article class="card">
+        <h3>Bài thơ C</h3>
+        <p>Đoạn trích ngắn…</p>
+      </article>
+    </div>
+  </section>
 
+  <!-- Đánh giá -->
+  <section id="danhgia" class="section container">
+    <h2>Đánh giá</h2>
+    <p>Trích dẫn vài nhận xét tiêu biểu từ độc giả &amp; nhà phê bình (bạn có thể thay nội dung sau).</p>
+  </section>
 
-<form class="comment-form" action="{{ url_for('comment') }}" method="post">
-<div class="row">
-<label for="name">Tên</label>
-<input type="text" id="name" name="name" placeholder="Tên của bạn (tuỳ chọn)" />
-</div>
-<div class="row">
-<label for="content">Nội dung</label>
-<textarea id="content" name="content" rows="4" placeholder="Hãy để lại lời nhắn…" required></textarea>
-</div>
-<button type="submit" class="btn">Gửi bình luận</button>
-</form>
+  <!-- Bình luận -->
+  <section id="binhluan" class="section container">
+    <h2>Bình luận</h2>
 
+    <form class="comment-form" action="{{ url_for('comment') }}" method="post">
+      <div class="row">
+        <label for="name">Tên</label>
+        <input type="text" id="name" name="name" placeholder="Tên của bạn (tuỳ chọn)" />
+      </div>
+      <div class="row">
+        <label for="content">Nội dung</label>
+        <textarea id="content" name="content" rows="4" placeholder="Hãy để lại lời nhắn…" required></textarea>
+      </div>
+      <button type="submit" class="btn">Gửi bình luận</button>
+    </form>
 
-{% if comments %}
-<ul class="comments">
-{% for c in comments %}
-<li class="comment">
-<div class="comment-meta">
-<strong>{{ c.name }}</strong>
-<span>• {{ c.created_at }}</span>
-</div>
-<p>{{ c.content }}</p>
-</li>
-{% endfor %}
-</ul>
-{% else %}
-<p class="muted">Chưa có bình luận nào. Hãy là người đầu tiên!</p>
-{% endif %}
-</section>
+    {% if comments %}
+    <ul class="comments">
+      {% for c in comments %}
+      <li class="comment">
+        <div class="comment-meta">
+          <strong>{{ c.name }}</strong>
+          <span>• {{ c.created_at }}</span>
+        </div>
+        <p>{{ c.content }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p class="muted">Chưa có bình luận nào. Bạn hãy trở thành người đầu tiên nha ê!</p>
+    {% endif %}
+  </section>
 </main>
 {% endblock %}
