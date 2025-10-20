@@ -2,23 +2,91 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Thơ Tân hình thức Việt{% endblock %}</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon/icon7.png') }}" />
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+  {% block head_extra %}{% endblock %}
+  <style>
+    /* Nhẹ nhàng căn phải phần context hiện “Tác giả · Tác phẩm” */
+    .nav-inner { gap: 16px; }
+    .nav-context {
+      margin-left: auto;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .nav-context a { color: var(--muted); text-decoration: none; }
+    .nav-context a:hover, .nav-context a:focus-visible { color: var(--fg); outline: none; text-decoration: underline; }
+    .nav-divider { opacity: 0.6; }
+    @media (max-width: 860px){
+      .nav-context { display:none; } /* Ẩn trên màn nhỏ để đỡ chật */
+    }
+  </style>
 </head>
-<body>
+
+<body class="{% block body_class %}{% endblock %}">
   <header class="navbar">
     <div class="container nav-inner">
-      <div class="brand"><a href="#top">Thơ Tân hình thức Việt</a></div>
-      <nav>
-        <a href="#gioithieu">Giới thiệu</a>
-        <a href="#tacgia">Tác giả</a>
-        <a href="#tacpham">Tác phẩm</a>
-        <a href="#danhgia">Đánh giá</a>
+      <!-- Brand -->
+      <div class="brand">
+        <a href="{{ url_for('index') }}" aria-label="Trang chủ">
+          <img src="{{ url_for('static', filename='images/icon/icon7.png') }}" style="height:40px; vertical-align:middle;" alt="Logo">
+          Thơ Tân hình thức Việt
+        </a>
+      </div>
+
+      <!-- Nav chính -->
+      <nav aria-label="Điều hướng chính">
+        <a href="{{ url_for('index') }}#top">Giới thiệu</a>
+
+        <div class="nav-author">
+          <a href="{{ url_for('index') }}#tacgia" class="has-dropdown">Tác giả &#9662;</a>
+          <div id="authorDropdown" class="dropdown" aria-hidden="true">
+            <!-- JS sẽ populate danh sách tác giả + 3 bài mới nhất -->
+            <div class="dropdown-inner">
+              <ul class="author-list"><!-- filled by JS --></ul>
+              <div class="poem-preview">
+                <h4>Các tác phẩm nổi bật</h4>
+                <ul class="poem-list"><!-- filled by JS --></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="{{ url_for('index') }}#tacpham">Tác phẩm</a>
+        <a href="{{ url_for('index') }}#danhgia">Đánh giá</a>
       </nav>
+
+      <!-- Context đang xem: Tác giả · Tác phẩm -->
+      {% if author or poem %}
+      <div class="nav-context" aria-label="Ngữ cảnh đang xem">
+        {% if author %}
+          <span>Tác giả:</span>
+          <a href="{{ url_for('author_page', author_slug=author.slug) }}">
+            {{ author.name }}
+          </a>
+        {% endif %}
+        {% if author and poem %}
+          <span class="nav-divider">·</span>
+        {% endif %}
+        {% if poem %}
+          <span>Tác phẩm:</span>
+          <a href="{{ url_for('poem_page', author_slug=author.slug, poem_slug=poem.slug, lang=poem.lang if poem.lang else None) }}">
+            {{ poem.title }}
+          </a>
+        {% endif %}
+      </div>
+      {% endif %}
     </div>
   </header>
 
@@ -27,7 +95,10 @@
   <footer class="footer">
     <div class="container">
       <p>&copy; Thơ Tân hình thức Việt • Một dự án văn học số</p>
+      <p>Mọi nội dung, bài thơ được trích dẫn trong dự án chỉ phục vụ cho mục đích học tập, nghiên cứu, không nhằm yếu tố thương mại.</p>
     </div>
   </footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>

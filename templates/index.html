@@ -5,22 +5,20 @@
 <main id="top">
   <!-- HERO -->
   <section class="hero">
-    .hero { background-image: url("/static/hero.jpg"); }
-
-  >
     <div class="hero-overlay">
-      <h1 class="hero-title">Thơ Tân hình thức Việt</h1>
-      <p class="hero-subtitle">Để những vầng thơ khắc họa tâm hồn bạn.</p>
+      <h1 class="hero-title">Thơ Tân hình thức Việt - Bản giao hưởng thời đại</h1>
+      <p class="hero-subtitle"><em>"Một giai điệu độc đáo của thời đại mới"</em></p> 
     </div>
-  </section>
+  </section>  
 
   <!-- Giới thiệu -->
   <section id="gioithieu" class="section container">
-    <h2>Giới thiệu</h2>
+    <h2>Giới thiệu</h2> 
     <p>
-      Chào mừng bạn đến với khung trời của <em>Thơ Tân hình thức Việt</em> — một dự án văn học số dành riêng cho việc khám phá và chia sẻ những tác phẩm thơ hiện đại mang đậm dấu ấn Việt Nam. 
-      Tại đây, bạn có thể tìm đọc các bài thơ đặc sắc, tìm hiểu về các tác giả
-      đồng thời có thể tham gia hoặc tham khảo đánh giá từ cộng đồng yêu thơ.
+      Xin chào!
+      Chúng mình là một nhóm nghiên cứu nhỏ thuộc khoa Ngữ văn – Truyền thông của Trường Đại học Sư phạm – Đại học Đà Nẵng. Xuất phát từ niềm quan tâm đặc biệt đối với sự vận động của thơ đương đại, nhóm đã tiến hành dự án tìm hiểu và giới thiệu <b>“Thơ Tân hình thức Việt – Bản giao hưởng thời đại”.</b> 
+      Trong quá trình nghiên cứu, chúng mình nhận thấy Thơ Tân hình thức Việt không chỉ là một thể thơ mới mẻ mà còn là nỗ lực tái tạo ngôn ngữ thơ Việt trong bối cảnh toàn cầu hóa, hội nhập và đổi mới tư duy sáng tạo. Đây là sự dung hòa giữa truyền thống và hiện đại, tạo nên một “không gian thơ” vừa gần gũi vừa bứt phá.
+      Website này ra đời với mong muốn trở thành một không gian mở để giới thiệu, lan tỏa và trao đổi về Thơ Tân hình thức Việt – nơi người đọc, người viết và người nghiên cứu có thể cùng gặp gỡ, cảm nhận và sáng tạo.
     </p>
   </section>
 
@@ -38,26 +36,30 @@
   <section id="tacpham" class="section container">
     <h2>Tác phẩm</h2>
     <div class="grid">
+      
       <article class="card">
         <h3>Bài thơ A</h3>
         <p>Đoạn trích ngắn…</p>
       </article>
+      
       <article class="card">
         <h3>Bài thơ B</h3>
         <p>Đoạn trích ngắn…</p>
       </article>
+      
       <article class="card">
         <h3>Bài thơ C</h3>
         <p>Đoạn trích ngắn…</p>
       </article>
+
     </div>
   </section>
 
   <!-- Đánh giá -->
-  <section id="danhgia" class="section container">
+  <!-- <section id="danhgia" class="section container">
     <h2>Đánh giá</h2>
     <p>Trích dẫn vài nhận xét tiêu biểu từ độc giả &amp; nhà phê bình (bạn có thể thay nội dung sau).</p>
-  </section>
+  </section> -->
 
   <!-- Bình luận -->
   <section id="binhluan" class="section container">
@@ -65,8 +67,8 @@
 
     <form class="comment-form" action="{{ url_for('comment') }}" method="post">
       <div class="row">
-        <label for="name">Tên</label>
-        <input type="text" id="name" name="name" placeholder="Tên của bạn (tuỳ chọn)" />
+        <label for="name">Cho mình biết bút danh của bạn nha</label>
+        <input type="text" id="name" name="name" placeholder="Bút danh của bạn là gì" />
       </div>
       <div class="row">
         <label for="content">Nội dung</label>

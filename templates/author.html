@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="container section">
+  <!-- Header tác giả -->
+  <header class="author-header" style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap;">
+    {% if author.image_url %}
+      <img
+        src="{{ author.image_url }}"
+        alt="Ảnh tác giả {{ author.name }}"
+        style="width:120px; height:120px; object-fit:cover; border-radius:14px; border:1px solid var(--border);"
+      >
+    {% endif %}
+
+    <div style="flex:1 1 280px;">
+      <h1 style="margin:0 0 8px 0;">{{ author.name }}</h1>
+      {% if author.bio %}
+        <p class="muted" style="margin:0; max-width: 60ch;">{{ author.bio }}</p>
+      {% else %}
+        <p class="muted" style="margin:0;">(Chưa có tiểu sử.)</p>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- Danh sách tác phẩm -->
+  <section style="margin-top:28px;">
+    <h2 style="margin:0 0 12px 0;">Tác phẩm</h2>
+
+    {% if poems and poems|length > 0 %}
+      <ul class="card-list">
+        {% for p in poems %}
+          <li class="card">
+            <a href="{{ url_for('poem_page', author_slug=author.slug, poem_slug=p.slug) }}" class="poem-link">
+              <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline;">
+                <span style="font-weight:600;">{{ p.title }}</span>
+                {% if p.created_at %}
+                  <time class="muted" datetime="{{ p.created_at.isoformat() }}">
+                    {{ p.created_at.strftime('%d/%m/%Y') }}
+                  </time>
+                {% endif %}
+              </div>
+            </a>
+
+            {% if p.source %}
+              <div class="muted" style="margin-top:6px; font-size:0.9rem;">
+                Nguồn: {{ 'CSDL' if p.source == 'db' else 'Tệp tin' }}
+              </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">Chưa có tác phẩm.</p>
+    {% endif %}
+  </section>
+</main>
+{% endblock %}

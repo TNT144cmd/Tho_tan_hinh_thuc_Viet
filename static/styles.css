@@ -1,0 +1,379 @@
+:root {
+  --bg: #88692aaa;
+  --fg: #384923;
+  --muted: #ffffff;
+  --accent: #118511;
+  --card: #d7dbd1;
+  --border: #0f0e0e;
+}
+
+/* ===== Base ===== */
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.container { width: min(1100px, 92%); margin: 0 auto; }
+
+/* ===== Navbar ===== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(198, 198, 214, 0.162);
+  border-bottom: 1px solid var(--border);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+@supports not ((-webkit-backdrop-filter: blur(8px)) or (backdrop-filter: blur(8px))) {
+  .navbar { background: rgba(64, 64, 146, 0.9); }
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  height: 70px;
+}
+
+.brand a {
+  text-decoration: none;
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.navbar nav a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 18px;
+}
+
+.navbar nav a:hover,
+.navbar nav a:focus-visible {
+  color: var(--fg);
+  outline: none;
+}
+
+/* ===== Dropdown Tác giả ===== */
+.nav-author { position: relative; display: inline-block; }
+.has-dropdown { color: var(--muted); text-decoration: none; margin-left: 18px; }
+.has-dropdown:hover { color: var(--fg); }
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: -12px;
+  display: none;
+  background: rgba(5, 5, 5, 0.98);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  min-width: 520px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+}
+.dropdown.open { display: block; }
+
+.dropdown-inner {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 16px;
+}
+
+.author-list, .poem-list { list-style: none; margin: 0; padding: 0; }
+
+.author-item, .poem-item {
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.author-item:hover, .poem-item:hover { background: var(--card); color: var(--fg); }
+
+.poem-preview h4 { margin: 8px 0; font-family: Merriweather, Georgia, serif; }
+
+/* ===== Ảnh nền đầu tiên (Hero) ===== */
+.hero {
+  background-image: url("/static/images/background/hero.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 56vh;
+  display: grid;
+  place-items: center;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+/* Overlay */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.57);
+  z-index: 1;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 228, 181, 0.15),
+    rgba(0, 0, 0, 0.3)
+  );
+  z-index: 2;
+}
+
+.hero-overlay {
+  position: relative;
+  text-align: center;
+  padding: 64px 24px;
+  z-index: 3;
+  background: rgba(5, 5, 5, 0.132);
+}
+
+.hero-title {
+  font-family: Merriweather, Georgia, serif;
+  font-size: clamp(22px, 6vw, 50px);
+  margin: 0 0 12px;
+  letter-spacing: 0.5px;
+  color: #ffffffcc;
+}
+
+.hero-subtitle {
+  color: #b7af5b;
+  text-shadow: 10px 100px 100px 100px rgba(0, 0, 0, 0.522);
+  margin: 10px 0 0;
+  font-size: clamp(10px, 2.2vw, 15px);
+}
+
+/* ==== Poems ==== */
+body.poem-page{
+  background: url("/static/images/background_poems/background_poem2.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+body.poem-page::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 100%;
+  background: rgba(87, 86, 86, 0.053);
+  border-radius: 8px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.back-link {
+  display: inline-block;
+  margin: 24px 0 8px;
+  font-size: 0.95rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+.back-link:hover,
+.back-link:focus-visible {
+  color: var(--fg);
+  text-decoration: underline;
+  outline: none;
+}
+
+.poem-title {
+  text-align: center;
+  font-family: "EB Garamond", serif;
+  font-size: clamp(26px, 4.5vw, 44px);
+  font-weight: 700;
+  font-style: italic;
+  line-height: 0.25;
+  letter-spacing: .2px;
+  color: #384923;
+  margin: 5px 0 20px; 
+}
+
+.poem-author {
+  text-align: right;
+  /* gộp các khai báo font-size tránh lặp */
+  font-size: large;
+  color: #384923;
+  margin: 5px 10px 20px;
+  font-weight: 700;
+}
+
+/* “Tờ giấy thơ” nổi trên nền */
+.poem-content {
+  max-width: 720px;
+  margin-top: 0;
+  margin: 0 auto;
+  color: #384923;
+  border-radius: 20px;
+  padding: 5px 30px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(9, 9, 9, 0.18); /* sửa cú pháp box-shadow */
+  white-space: pre-wrap;
+  font-family: "Noto Serif", Merriweather, Georgia, serif;
+  font-size: 1.1rem;
+  line-height: 2;
+  border-left: 0 solid var(--accent);
+  text-align: left;
+  animation: poemFade .7s ease both;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.poem-content--dark {
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  box-shadow: 5px 10px 26px rgba(0,0,0,.25);
+  border-left: 5px solid var(--accent);
+}
+
+/* Hiệu ứng xuất hiện */
+@keyframes poemFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .poem-content { padding: 22px 20px; font-size: 1.02rem; }
+}
+
+/* ===== Sections ===== */
+.section { padding: 56px 0; }
+.section h2 {
+  font-family: Merriweather, Georgia, serif;
+  margin-top: 0;
+}
+.muted { color: var(--muted); }
+
+/* Giúp anchor không bị che bởi navbar sticky */
+.section, [id] { scroll-margin-top: 76px; }
+
+/* ===== Cards & grid ===== */
+.card-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+/* ===== Comment form ===== */
+.comment-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.comment-form .row {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.comment-form input,
+.comment-form textarea {
+  background: #0f0f12;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.comment-form input:focus-visible,
+.comment-form textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btn {
+  background: var(--fg);
+  color: #111;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn:hover,
+.btn:focus-visible {
+  filter: brightness(0.9);
+  outline: none;
+}
+
+/* Trạng thái active cho nút chọn ngôn ngữ */
+.btn.active {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ===== Comments list ===== */
+.comments {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.comment {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+
+.comment-meta {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+/* ===== Footer ===== */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 0 40px;
+  color: #384923;
+  text-align: center;
+}
+
+/* ===== Responsive tweaks ===== */
+@media (max-width: 600px) {
+  .nav-inner {
+    height: auto;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 0;
+  }
+}
+
+/* Giảm chuyển động */
+@media (prefers-reduced-motion: reduce) {
+  * { 
+    animation-duration: 0.01ms !important; 
+    animation-iteration-count: 1 !important; 
+    transition-duration: 0.01ms !important; 
+    scroll-behavior: auto !important; 
+  }
+}
