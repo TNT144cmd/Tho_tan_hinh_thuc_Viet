@@ -3,61 +3,55 @@
 {% block body_class %}poem-page{% endblock %}
 
 {% block content %}
-<main class="container section" style="display:grid; grid-template-columns: 1fr 320px; gap: 32px; align-items:start;">
+<main class="container section poem-layout" >
   <!-- Cột nội dung bài thơ -->
   <section>
     <!-- Tiêu đề bài thơ -->
-    <h1 class="poem-title" style="margin: 0 0 4px 0;">{{ poem.title }}</h1>
-
+    <h1 class="poem-title" style="margin: 0 0 0 0;">{{ poem.title }}</h1>
     <!-- Tên tác giả và ngày tạo -->
-    <div class="poem-author" style="color:#666; margin-bottom:16px;">
-      {{ author.name }}
-      {% if poem.created_at %} · {{ poem.created_at.strftime('%d/%m/%Y') }}{% endif %}
+    <div class="poem-author" style="color:#666; margin:20px 50px 0 0;">
+      <em>{{ author.name }}</em>
     </div>
 
     <!-- Bộ chuyển ngôn ngữ -->
-    <div class="poem-lang-switch" style="display:flex; gap:8px; margin: 12px 0 16px; z-index: 3 ;">
+    <div class="poem-lang-switch">
       <!-- Nút VI (luôn khả dụng) -->
       <a
         href="{{ url_for('poem_page', author_slug=author.slug, poem_slug=poem.slug, lang='vi') }}"
         class="btn{% if poem.lang=='vi' %} active{% endif %}"
-        style="padding:6px 10px; border:1px solid #ccc; border-radius:6px; text-decoration:none;"
+        style="padding: 10px 10px; border: 1px solid #020202; border-radius:6px; text-align: center; text-decoration:none;"
       >Tiếng Việt</a>
  
       <!-- Nút EN -->
       <a
         href="{{ url_for('poem_page', author_slug=author.slug, poem_slug=poem.slug, lang='en') }}"
         class="btn{% if poem.lang=='en' %} active{% endif %}"
-        style="padding:6px 10px; border:1px solid #ccc; border-radius:6px; text-decoration:none;"
+        style="padding:10px 10px; border:1px solid #020202; border-radius:6px; text-align:center ;text-decoration:none;"
       >English</a>
     </div>
 
     <!-- Nội dung bài thơ -->
-    <article class="poem-content" style="white-space: pre-wrap; line-height: 1.7; font-size: 1.05rem;">
-{% if poem.lang == 'en' and 'en' not in poem.available_langs %}
-    <em>There is have no English version.</em>
-{% else %}
+    <article class="poem-content">{% if poem.lang == 'en' and 'en' not in poem.available_langs %}
+<em>No English version is available </em>🥲👌🥀.{% else %}
 {{content}}{% endif %}
     </article>
   </section>
 
   <!-- Sidebar: các bài thơ khác của tác giả -->
-  <aside>
-    <div style="position:sticky; top:16px;">
-      <h3 style="margin-top:0;">Những tác phẩm khác</h3>
-      <ul style="list-style:none; padding-left:0; margin: 8px 0 0;">
-        {% for it in other_poems %}
-          <li style="margin:8px 0;">
-            <a
-              href="{{ url_for('poem_page', author_slug=author.slug, poem_slug=it.slug) }}"
-              class ="poem-link{% if it.slug==poem.slug %} is-active{% endif %}"
-            >{{ it.title }}</a>
-          </li>
-        {% else %}
-          <li style="color:#888;">(Không có bài khác)</li>
-        {% endfor %}
-      </ul>
-    </div>
+  <aside>  
+    <h3 style = "margin-top: 0; font-size: x-large;">Những tác phẩm khác</h3>
+    <ul class = "poem-sidebar_list">
+      {% for it in other_poems %}
+        <li class="poem-sidebar_item">
+          <a
+            href="{{ url_for('poem_page', author_slug=author.slug, poem_slug=it.slug) }}"
+            class ="poem-sidebar_link {% if it.slug==poem.slug %} is-active {% endif %}"
+          >{{ it.title }}</a>
+        </li>
+      {% else %}
+        <li style="color:#888;">(Không có bài khác)</li>
+      {% endfor %}
+    </ul>
   </aside>
 </main>
 {% endblock %}
