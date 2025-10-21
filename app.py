@@ -1,9 +1,14 @@
+# app.py
 import re
-from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, send_from_directory
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, date
 import os
 from pathlib import Path
+from datetime import datetime, date
+
+from flask import (
+    Flask, render_template, request, redirect, url_for,
+    jsonify, abort, send_from_directory
+)
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
@@ -13,13 +18,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # ================== Tiện ích chung ==================
-def slugify(s):
+def slugify(s: str) -> str:
     s = re.sub(r"[^\w\s-]", "", s, flags=re.UNICODE).strip().lower()
     s = re.sub(r"[-\s]+", "-", s)
     return s
 
 def pretty_from_slug(slug: str) -> str:
-    return slug.replace("-", " ").title()
+    return slug.replace("-", " ").title() if slug else ""
 
 def to_iso(v):
     """Trả về chuỗi ISO 8601 hoặc None."""
@@ -81,8 +86,9 @@ os.makedirs(POEMS_DIR, exist_ok=True)
 PROFILE_DIR_NAMES = {"tiểu sử", "tieu su", "tieu_su", "tieu-su"}
 LANG_SUFFIX_RE = re.compile(r"^(?P<base>.+)_(?P<lang>vi|en)\.txt$", re.IGNORECASE)
 
-def read_text_file(path):
-    with open(path, "r", encoding="utf-8") as f:
+def read_text_file(path: str) -> str:
+    # utf-8-sig để tự loại BOM, strip() để bỏ dòng trống đầu/cuối
+    with open(path, "r", encoding="utf-8-sig") as f:
         return f.read()
 
 def is_profile_dir(name: str) -> bool:
@@ -91,81 +97,82 @@ def is_profile_dir(name: str) -> bool:
 
 def find_poem_files(author_slug: str, poem_slug: str):
     """
-    Nhận diện file trong folder bài thơ poem/<author>/<poem_slug>/ theo mẫu:
-      - <tengoc>_vi.txt
-      - <tengoc>_en.txt
+    Nhận diện file trong folder poem/<author>/<poem_slug>/ theo mẫu:
+      - <base>_vi.txt
+      - <base>_en.txt
     Trả về:
       {
         "vi": path|None,
         "en": path|None,
-        "base_slug": str|None,
-        "base_title": str|None,
+        "title_vi": str|None,
+        "title_en": str|None,
         "created_at": datetime|None
       }
-
-    * Tương thích ngược: nếu không thấy *_vi.txt|*_en.txt thì fallback vi.txt|en.txt
-      và dùng poem_slug làm base.
+    - Chấp nhận base khác nhau giữa VI và EN.
+    - Nếu không có *_vi/_en thì fallback vi.txt/en.txt (không có title_lang).
     """
-    base_dir = Path(POEMS_DIR) / author_slug / poem_slug
-    vi_path = en_path = None
-    base_name = None
-    mtimes = []
-
-    if base_dir.exists() and base_dir.is_dir():
-        # quét các file .txt để tìm pattern <base>_(vi|en).txt
-        for f in base_dir.iterdir():
-            if not (f.is_file() and f.suffix.lower() == ".txt"):
-                continue
-            m = LANG_SUFFIX_RE.match(f.name)
-            if m:
-                lang = m.group("lang").lower()
-                base_name_found = m.group("base").strip()
-                if lang == "vi":
-                    vi_path = str(f)
-                elif lang == "en":
-                    en_path = str(f)
-                if base_name is None:
-                    base_name = base_name_found
-
-        # fallback kiểu cũ vi.txt/en.txt
-        if not vi_path:
-            fallback_vi = base_dir / "vi.txt"
-            if fallback_vi.exists():
-                vi_path = str(fallback_vi)
-        if not en_path:
-            fallback_en = base_dir / "en.txt"
-            if fallback_en.exists():
-                en_path = str(fallback_en)
-
-        if not base_name:
-            base_name = poem_slug
-
-        # mtime mới nhất
-        for p in (vi_path, en_path):
-            if p:
-                try:
-                    mtimes.append(Path(p).stat().st_mtime)
-                except Exception:
-                    pass
-        if mtimes:
-            created_at = datetime.fromtimestamp(max(mtimes))
-        else:
-            created_at = datetime.fromtimestamp(base_dir.stat().st_mtime) if base_dir.exists() else None
-    else:
-        vi_path = en_path = None
-        base_name = poem_slug
-        created_at = None
-
-    base_slug = slugify(base_name) if base_name else None
-    base_title = pretty_from_slug(base_slug) if base_slug else None
-
-    return {
-        "vi": vi_path,
-        "en": en_path,
-        "base_slug": base_slug,
-        "base_title": base_title,
-        "created_at": created_at,
+    folder = Path(POEMS_DIR) / author_slug / poem_slug
+    out = {
+        "vi": None, "en": None,
+        "title_vi": None, "title_en": None,
+        "created_at": None
     }
+    if not folder.exists() or not folder.is_dir():
+        return out
+
+    mtimes = []
+    # Quét các file *_vi.txt / *_en.txt
+    for f in folder.iterdir():
+        if not (f.is_file() and f.suffix.lower() == ".txt"):
+            continue
+        m = LANG_SUFFIX_RE.match(f.name)
+        if m:
+            lang = m.group("lang").lower()
+            base = m.group("base").strip()
+            out[lang] = str(f)
+            out[f"title_{lang}"] = pretty_from_slug(slugify(base))
+            try:
+                mtimes.append(f.stat().st_mtime)
+            except Exception:
+                pass
+
+    # Fallback vi.txt / en.txt nếu chưa nhận diện
+    if not out["vi"]:
+        f_vi = folder / "vi.txt"
+        if f_vi.exists():
+            out["vi"] = str(f_vi)
+            try:
+                mtimes.append(f_vi.stat().st_mtime)
+            except Exception:
+                pass
+    if not out["en"]:
+        f_en = folder / "en.txt"
+        if f_en.exists():
+            out["en"] = str(f_en)
+            try:
+                mtimes.append(f_en.stat().st_mtime)
+            except Exception:
+                pass
+
+    if mtimes:
+        out["created_at"] = datetime.fromtimestamp(max(mtimes))
+    else:
+        try:
+            out["created_at"] = datetime.fromtimestamp(folder.stat().st_mtime)
+        except Exception:
+            out["created_at"] = None
+
+    return out
+
+def read_lang_file(path: str) -> str:
+    """Đọc file ngôn ngữ; nếu không tồn tại hoặc rỗng → trả về chuỗi rỗng."""
+    if not path:
+        return ""
+    p = Path(path)
+    if not p.exists() or not p.is_file():
+        return ""
+    text = read_text_file(str(p))
+    return text if text else ""
 
 def read_author_profile(author_slug: str):
     """
@@ -196,7 +203,7 @@ def poem_files(filename):
     """Phục vụ file tĩnh từ thư mục 'poem' (ảnh tác giả, v.v.)."""
     return send_from_directory(POEMS_DIR, filename)
 
-def list_poems_in_folder(author_slug):
+def list_poems_in_folder(author_slug: str):
     """
     Đọc danh sách BÀI THƠ: mỗi bài là 1 folder trong poem/<author_slug>/ (trừ 'tiểu sử').
     Trả về list dict {title, slug, path, created_at}
@@ -210,45 +217,26 @@ def list_poems_in_folder(author_slug):
             continue
         poem_slug = sub.name
         files = find_poem_files(author_slug, poem_slug)
+        # ưu tiên title_vi, nếu không có thì title_en, nếu vẫn không có thì từ slug
+        title = files.get("title_vi") or files.get("title_en") or pretty_from_slug(poem_slug)
         poems.append({
-            "title": files["base_title"] or pretty_from_slug(poem_slug),
+            "title": title,
             "slug": poem_slug,
             "path": str(sub),
-            "created_at": files["created_at"]
+            "created_at": files.get("created_at"),
         })
     poems.sort(key=lambda x: (x["created_at"] is None, x["created_at"]), reverse=True)
     return poems
 
-def read_poem_content(author_slug, poem_slug, lang="vi"):
+def read_poem_content(author_slug, poem_slug, lang="vi") -> str:
     """
     Đọc nội dung bài thơ theo ngôn ngữ (vi|en).
-    Ưu tiên DB nếu có nội dung; nếu cả DB và file cùng có -> gộp (DB trước, file sau).
+    - Nếu file không tồn tại HOẶC rỗng → trả về "" (để template hiển thị thông báo).
+    - Không abort(404) ở đây.
     """
-    # DB
-    db_content = None
-    author = Author.query.filter_by(slug=author_slug).first()
-    if author:
-        poem = Poem.query.filter_by(author_id=author.id, slug=poem_slug).first()
-        if poem and poem.content:
-            db_content = poem.content.strip()
-
-    # File theo lang
-    file_content = None
     files = find_poem_files(author_slug, poem_slug)
     sel_path = files.get(lang)
-    if sel_path and Path(sel_path).exists():
-        file_content = read_text_file(sel_path).strip()
-
-    # Kết hợp ưu tiên
-    if db_content and file_content:
-        return f"{db_content}\n\n---\n\n{file_content}"
-    elif db_content:
-        return db_content
-    elif file_content:
-        return file_content
-    else:
-        return ""
-
+    return read_lang_file(sel_path)
 
 # ================== Khởi tạo DB ==================
 with app.app_context():
@@ -355,7 +343,7 @@ def author_page(author_slug):
 
     profile = read_author_profile(author_slug)
 
-    class SimpleAuthor: pass
+    class SimpleAuthor: ...
     a = SimpleAuthor()
     a.name = author.name if author else pretty_from_slug(author_slug)
     a.slug = author_slug
@@ -367,58 +355,79 @@ def author_page(author_slug):
 # ===== Trang bài thơ =====
 @app.route("/tac-gia/<author_slug>/<poem_slug>/")
 def poem_page(author_slug, poem_slug):
-    # chọn ngôn ngữ qua query param (?lang=vi|en), mặc định vi
+    # 1) Lấy ngôn ngữ (?lang=vi|en), mặc định vi
     lang = request.args.get("lang", "vi").lower()
     if lang not in ("vi", "en"):
         lang = "vi"
 
-    # DB
+    # 2) DB (nếu có)
     author = Author.query.filter_by(slug=author_slug).first()
-    poem_db = None
-    if author:
-        poem_db = Poem.query.filter_by(author_id=author.id, slug=poem_slug).first()
+    poem_db = Poem.query.filter_by(author_id=author.id, slug=poem_slug).first() if author else None
 
+    # 3) File system
     files = find_poem_files(author_slug, poem_slug)
 
-    # Tiêu đề ưu tiên DB; nếu không có -> dùng base_title từ tên file *_vi/_en
-    db_title = poem_db.title.strip() if (poem_db and poem_db.title) else None
-    title = db_title or files["base_title"] or pretty_from_slug(poem_slug)
+    # 4) Tiêu đề theo ngôn ngữ (ưu tiên đúng lang)
+    #    - Nếu không có title_lang → rơi về DB title → rơi về pretty_from_slug
+    title = (
+        files.get(f"title_{lang}")
+        or (poem_db.title if poem_db else None)
+        or pretty_from_slug(poem_slug)
+    )
 
-    # created_at ưu tiên DB; nếu không có -> từ files
-    created_at = (poem_db.created_at if poem_db else None) or files["created_at"]
+    # 5) created_at (DB ưu tiên, rồi tới FS)
+    created_at = (poem_db.created_at if poem_db else None) or files.get("created_at")
 
-    # Nội dung
+    # 6) Nội dung theo lang (trả về "" nếu file không tồn tại / rỗng)
     content = read_poem_content(author_slug, poem_slug, lang=lang)
 
-    # SimpleAuthor
-    class SimpleAuthor: pass
+    # 7) Xác định ngôn ngữ nào THỰC SỰ có nội dung (để template biết hiển thị thông báo)
+    vi_content = read_lang_file(files.get("vi"))
+    en_content = read_lang_file(files.get("en"))
+    available_langs = []
+    if vi_content:
+        available_langs.append("vi")
+    if en_content:
+        available_langs.append("en")
+
+    # Nếu hoàn toàn không có nội dung ở cả DB lẫn FS → 404
+    has_any_content = bool(content or vi_content or en_content or (poem_db and poem_db.content))
+    if not has_any_content:
+        abort(404)
+
+    # 8) SimpleAuthor / SimplePoem cho template
+    class SimpleAuthor: ...
     a = SimpleAuthor()
     a.name = author.name if author else pretty_from_slug(author_slug)
     a.slug = author_slug
 
-    # SimplePoem
-    class SimplePoem: pass
+    class SimplePoem: ...
     p = SimplePoem()
     p.slug = poem_slug
     p.title = title
     p.created_at = created_at
     p.lang = lang
-    p.available_langs = [l for l in ("vi", "en") if files.get(l) and Path(files[l]).exists()]
+    p.available_langs = available_langs  # dùng để quyết định thông báo "Have no English version"
 
-    # Sidebar: bài khác
+    # 9) Sidebar: bài khác
     other_poems_list = list_poems_in_folder(author_slug) or []
     other_poems = []
     for it in other_poems_list:
-        if it.get("slug") == poem_slug:
-            continue
+        # if it.get("slug") == poem_slug:
+        #     continue
         other_poems.append({
             "slug": it.get("slug"),
             "title": it.get("title") or pretty_from_slug(it.get("slug") or "")
         })
     other_poems.sort(key=lambda x: x["title"])
 
-    return render_template("poem.html",
-                           author=a, poem=p, content=content, other_poems=other_poems)
+    return render_template(
+        "poem.html",
+        author=a,
+        poem=p,
+        content=content,
+        other_poems=other_poems
+    )
 
 # ================== Main ==================
 if __name__ == "__main__":
