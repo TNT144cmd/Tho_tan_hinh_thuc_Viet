@@ -1,97 +1,49 @@
 {% extends 'base.html' %}
-{% block title %}Thơ Tân hình thức Việt{% endblock %}
 
 {% block content %}
 <main id="top">
+
   <!-- HERO -->
   <section class="hero">
     <div class="hero-overlay">
       <h1 class="hero-title">Thơ Tân hình thức Việt - Bản giao hưởng thời đại</h1>
-      <p class="hero-subtitle"><em>"Một giai điệu độc đáo của thời đại mới"</em></p> 
-    </div>
-  </section>  
-
-  <!-- Giới thiệu -->
-  <section id="gioithieu" class="section container">
-    <h2>Giới thiệu</h2> 
-    <p>
-      Xin chào!
-      Chúng mình là một nhóm nghiên cứu nhỏ thuộc khoa Ngữ văn – Truyền thông của Trường Đại học Sư phạm – Đại học Đà Nẵng. Xuất phát từ niềm quan tâm đặc biệt đối với sự vận động của thơ đương đại, nhóm đã tiến hành dự án tìm hiểu và giới thiệu <b>“Thơ Tân hình thức Việt – Bản giao hưởng thời đại”.</b> 
-      Trong quá trình nghiên cứu, chúng mình nhận thấy Thơ Tân hình thức Việt không chỉ là một thể thơ mới mẻ mà còn là nỗ lực tái tạo ngôn ngữ thơ Việt trong bối cảnh toàn cầu hóa, hội nhập và đổi mới tư duy sáng tạo. Đây là sự dung hòa giữa truyền thống và hiện đại, tạo nên một “không gian thơ” vừa gần gũi vừa bứt phá.
-      Website này ra đời với mong muốn trở thành một không gian mở để giới thiệu, lan tỏa và trao đổi về Thơ Tân hình thức Việt – nơi người đọc, người viết và người nghiên cứu có thể cùng gặp gỡ, cảm nhận và sáng tạo.
-    </p>
-  </section>
-
-  <!-- Tác giả -->
-  <section id="tacgia" class="section container">
-    <h2>Tác giả</h2>
-    <ul class="card-list">
-      <li class="card">Tên tác giả 1</li>
-      <li class="card">Tên tác giả 2</li>
-      <li class="card">Tên tác giả 3</li>
-    </ul>
-  </section>
-
-  <!-- Tác phẩm -->
-  <section id="tacpham" class="section container">
-    <h2>Tác phẩm</h2>
-    <div class="grid">
-      
-      <article class="card">
-        <h3>Bài thơ A</h3>
-        <p>Đoạn trích ngắn…</p>
-      </article>
-      
-      <article class="card">
-        <h3>Bài thơ B</h3>
-        <p>Đoạn trích ngắn…</p>
-      </article>
-      
-      <article class="card">
-        <h3>Bài thơ C</h3>
-        <p>Đoạn trích ngắn…</p>
-      </article>
-
+      <p class="hero-subtitle"><em>"Một giai điệu độc đáo của thời đại mới"</em></p>
     </div>
   </section>
 
-  <!-- Đánh giá -->
-  <!-- <section id="danhgia" class="section container">
-    <h2>Đánh giá</h2>
-    <p>Trích dẫn vài nhận xét tiêu biểu từ độc giả &amp; nhà phê bình (bạn có thể thay nội dung sau).</p>
-  </section> -->
-
-  <!-- Bình luận -->
-  <section id="binhluan" class="section container">
-    <h2>Bình luận</h2>
-
-    <form class="comment-form" action="{{ url_for('comment') }}" method="post">
-      <div class="row">
-        <label for="name">Cho mình biết bút danh của bạn nha</label>
-        <input type="text" id="name" name="name" placeholder="Bút danh của bạn là gì" />
-      </div>
-      <div class="row">
-        <label for="content">Nội dung</label>
-        <textarea id="content" name="content" rows="4" placeholder="Hãy để lại lời nhắn…" required></textarea>
-      </div>
-      <button type="submit" class="btn">Gửi bình luận</button>
-    </form>
-
-    {% if comments %}
-    <ul class="comments">
-      {% for c in comments %}
-      <li class="comment">
-        <div class="comment-meta">
-          <strong>{{ c.name }}</strong>
-          <span>• {{ c.created_at }}</span>
-        </div>
-        <p>{{ c.content }}</p>
-      </li>
-      {% endfor %}
-    </ul>
-    {% else %}
-      <p class="muted">Chưa có bình luận nào. Bạn hãy trở thành người đầu tiên nha ê!</p>
-    {% endif %}
+  <!-- PHẦN 1: GIỚI THIỆU -->
+  <section id="gioithieu" class="section">
+    <div class="container">
+      <h2 class="section-title">Giới thiệu</h2>
+      <article class="paper prewrap">
+Xin chào!
+Chúng mình là một nhóm nghiên cứu nhỏ thuộc khoa Ngữ văn – Truyền thông của Trường Đại học Sư phạm – Đại học Đà Nẵng. Xuất phát từ niềm quan tâm đặc biệt đối với sự vận động của thơ đương đại, nhóm đã tiến hành dự án tìm hiểu và giới thiệu “Thơ Tân hình thức Việt – Bản giao hưởng thời đại”.
+Trong quá trình nghiên cứu, chúng mình nhận thấy Thơ Tân hình thức Việt không chỉ là một thể thơ mới mẻ mà còn là nỗ lực tái tạo ngôn ngữ thơ Việt trong bối cảnh toàn cầu hóa, hội nhập và đổi mới tư duy sáng tạo. Đây là sự dung hòa giữa truyền thống và hiện đại, tạo nên một “không gian thơ” vừa gần gũi vừa bứt phá.
+Website này ra đời với mong muốn trở thành một không gian mở để giới thiệu, lan tỏa và trao đổi về Thơ Tân hình thức Việt – nơi người đọc, người viết và người nghiên cứu có thể cùng gặp gỡ, cảm nhận và sáng tạo.
+      </article>
+    </div>
   </section>
+
+  <!-- PHẦN 2: GIỚI THIỆU VỀ THƠ THTV -->
+  <section id="gioithieu-thtv" class="section">
+    <div class="container">
+      <h2 class="section-title">VỀ THƠ TÂN HÌNH THỨC VIỆT</h2>
+      <article class="paper prewrap">
+“TÂN HÌNH THỨC LÀ GÌ?”
+Tóm lược: Dùng kỹ thuật vắt dòng chuyển tất cả những thể thơ có vần ở cuối dòng: 5 chữ, 7 chữ, 8 chữ và lục bát, thành thể thơ không vần. Sau đó, dùng kĩ thuật lặp lại, tạo nhịp điệu và hồi phục vần ở bất cứ chỗ nào trong bài thơ.
+(Trích Khế Iêm (2019), Vũ điệu không vần - toàn tập,
+phần Tân Hình thức hành trình và tổng kết, tr.341)
+Khế Iêm: “Thơ Tân hình thức là thể thơ không vần, sử dụng kỹ thuật vắt dòng và lặp lại để tạo nhịp điệu và cấu trúc cho bài thơ”
+(Trích Khế Iêm (2011), Vũ điệu không vần - toàn tập, Nxb Tân hình thức, tr.45)
+	“Tân hình thức là một phong trào thơ Mỹ, khởi đầu từ thập niên 1980 và phát triển những năm 1990, chủ trương bởi một số nhà thơ trẻ sáng tác theo thể luật truyền thống. Thơ tự do suốt thế kỷ 20 phát triển mạnh mẽ ở Mỹ sau Thế chiến thứ hai, với rất nhiều phong trào tiền phong, cạn kiệt vào cuối thế kỷ, tạo nên phản ứng, hồi phục lại thơ thể luật. Sự nổi lên của phong trào thơ Tân Hình thức làm cho sinh hoạt thơ Mỹ trở nên quân bình. Nhưng khi quay về vần luật, một thời gian sau một số nhà thơ Mỹ cho rằng không cần thiết phải có một thuật ngữ nào khác, thơ hay là được rồi. Như vậy, chẳng lẽ thuật ngữ “Tân Hình thức” chỉ là chuyện hồi phục truyền thống? “Tân” ở đây có nghĩa là “trở về” (retro), chứ không có gì là “tân”. 
+	Đành rằng những yếu tố của thơ Tân Hình thức đều có sẵn từ trước như vắt dòng, luật tắc, tính truyện và ngay cả ngôn ngữ nói thông thường… Nhưng ngôn ngữ ở mỗi thời mỗi khác. Và khi dùng ngôn ngữ đời thường tôn đời sống vào thơ, thơ trở nên sống động, lôi cuốn người đọc và làm cho thơ vần luật hoàn toàn lột xác. Đó là một thành công không thể phủ nhận và là một phong cách lớn. 
+	Một lý do nữa là người đọc ở thời đại văn minh điện toán, đã không còn chú ý mấy đến thơ, tiêu chuẩn làm mới của thơ tự do không còn đủ sức gây ngạc nhiên, và như thế những nhà thơ phải quay về với tiêu chuẩn hay truyền thống, bằng tài năng thật sự của mình, để mong duy trì sự tồn tại của thơ.
+	Những nhà thơ Việt vào đầu năm 2000 qua số báo đặc biệt “Chào đón thiên niên kỷ mới” của Tạp chí Thơ, mượn thuật ngữ “Tân Hình thức” để giới thiệu vào thơ Việt thể thơ Không vần của thơ tiếng Anh. Tiếp nhận một thể thơ là tiếp nhận phần thi pháp (cách làm thơ), áp dụng những yếu tố mới: vắt dòng, kĩ thuật lặp lại, tính truyện và ngôn ngữ đời thường.”
+(Trích Khế Iêm (2019), Vũ điệu không vần - toàn tập, 
+phần Tân Hình thức nhắc lại – 10 năm)
+      </article>
+    </div>
+  </section>
+
 </main>
 {% endblock %}

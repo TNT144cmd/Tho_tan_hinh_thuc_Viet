@@ -429,6 +429,12 @@ def poem_page(author_slug, poem_slug):
         other_poems=other_poems
     )
 
+# Trang đánh giá
+@app.route("/review")
+def review():
+    return render_template("review.html")
+
+
 # ================== Main ==================
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

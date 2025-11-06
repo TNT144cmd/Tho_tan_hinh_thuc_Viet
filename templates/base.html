@@ -17,7 +17,7 @@
   {% block head_extra %}{% endblock %}
   <style>
     /* Nhẹ nhàng căn phải phần context hiện “Tác giả · Tác phẩm” */
-    .nav-inner { gap: 16px; }
+    /* .nav-inner { gap: 16px; } */
     .nav-context {
       margin-left: auto;
       display: flex; align-items: center; gap: 10px;
@@ -28,7 +28,7 @@
     .nav-context a { color: var(--muted); text-decoration: none; }
     .nav-context a:hover, .nav-context a:focus-visible { color: var(--fg); outline: none; text-decoration: underline; }
     .nav-divider { opacity: 0.6; }
-    @media (max-width: 860px){
+    @media (max-width: 500px){
       .nav-context { display:none; } /* Ẩn trên màn nhỏ để đỡ chật */
     }
   </style>
@@ -46,15 +46,18 @@
       </div>
 
       <!-- Nav chính -->
-      <nav aria-label="Điều hướng chính">
+      <nav aria-label="Điều hướng chính" style="color: var(--fg)">
         <a href="{{ url_for('index') }}#top">Giới thiệu</a>
-
+        <!-- Tác giả với dropdown các tác phẩm -->
         <div class="nav-author">
           <a href="{{ url_for('index') }}#tacgia" class="has-dropdown">Tác giả &#9662;</a>
           <div id="authorDropdown" class="dropdown" aria-hidden="true">
             <!-- JS sẽ populate danh sách tác giả + 3 bài mới nhất -->
             <div class="dropdown-inner">
-              <ul class="author-list"><!-- filled by JS --></ul>
+              <div class="poem-preview">
+                <h4>Tất cả tác giả</h4>
+                <ul class="author-list"><!-- filled by JS --></ul>
+              </div>
               <div class="poem-preview">
                 <h4>Các tác phẩm nổi bật</h4>
                 <ul class="poem-list"><!-- filled by JS --></ul>
@@ -62,9 +65,10 @@
             </div>
           </div>
         </div>
+        <!-- Page đánh giá và comment của readers -->
+          <!-- <a href="{{ url_for('index') }}#tacpham">Tác phẩm</a> -->
+        <a href="{{ url_for('review') }}">Đánh giá</a>
 
-        <a href="{{ url_for('index') }}#tacpham">Tác phẩm</a>
-        <a href="{{ url_for('index') }}#danhgia">Đánh giá</a>
       </nav>
 
       <!-- Context đang xem: Tác giả · Tác phẩm -->
