@@ -150,7 +150,7 @@ html, body {
   color: #b7af5b;
   text-shadow: 10px 100px 100px 100px rgba(0, 0, 0, 0.522);
   margin: 10px 0 0;
-  font-size: clamp(10px, 2.2vw, 15px);
+  font-size: clamp(15px, 2.2vw, 30px);
 }
 
 /* ==== Poems ==== */
@@ -227,7 +227,7 @@ body.poem-page::before {
   animation: poemFade .7s ease both;
   font-weight: 600;
   font-style: italic;
-  
+
   word-break: normal;
   overflow-wrap: normal;
   hyphens: none;
@@ -501,7 +501,7 @@ body.poem-page::before {
 }
 
 /* Giữ nguyên dãn dòng/ngắt dòng như trong mã nguồn */
-.prewrap { white-space: pre-wrap; line-height: 1.7; }
+.prewrap { white-space: pre-wrap; line-height: 1.7; text-align: justify;}
 
 /* Tắt resize và thanh cuộn cho textarea tự giãn */
 textarea.auto-grow {
