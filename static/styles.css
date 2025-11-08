@@ -193,7 +193,8 @@ body.poem-page::before {
   font-size: clamp(26px, 4.5vw, 44px);
   font-weight: 700;
   font-style: italic;
-  line-height: 0.25;
+  /* text-align: justify;  */
+  line-height: 1.2;
   letter-spacing: .2px;
   color: #384923;
   margin: 5px 0 20px; 
