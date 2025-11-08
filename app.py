@@ -26,6 +26,20 @@ def slugify(s: str) -> str:
 def pretty_from_slug(slug: str) -> str:
     return slug.replace("-", " ").title() if slug else ""
 
+def title_from_filename_base(base: str) -> str:
+    """
+    Tạo tiêu đề đẹp từ phần tên file (không xoá ký tự như @, ?, ! ...)
+    Ví dụ:
+      "@ ERA"        -> "@ Era"
+      "can_tro_nho"  -> "Can Tro Nho"
+    """
+    # thay _ và - bằng khoảng trắng, giữ lại các ký tự khác
+    s = re.sub(r"[_\-]+", " ", base).strip()
+    if not s:
+        return ""
+    return s.title()
+
+
 def to_iso(v):
     """Trả về chuỗi ISO 8601 hoặc None."""
     if v is None:
@@ -130,7 +144,7 @@ def find_poem_files(author_slug: str, poem_slug: str):
             lang = m.group("lang").lower()
             base = m.group("base").strip()
             out[lang] = str(f)
-            out[f"title_{lang}"] = pretty_from_slug(slugify(base))
+            out[f"title_{lang}"] = title_from_filename_base(base)
             try:
                 mtimes.append(f.stat().st_mtime)
             except Exception:
@@ -432,7 +446,19 @@ def poem_page(author_slug, poem_slug):
 # Trang đánh giá
 @app.route("/review")
 def review():
-    return render_template("review.html")
+    comments = Comment.query.order_by(Comment.created_at.desc()).all()
+    return render_template("review.html", comments=comments)
+
+@app.route("/review/comment", methods=["POST"])
+def review_comment():
+    name = request.form.get("name", "Ẩn danh").strip()[:60]
+    content = request.form.get("content", "").strip()[:2000]
+    if content:
+        db.session.add(Comment(name=name or "Ẩn danh", content=content))
+        db.session.commit()
+    # Sau khi gửi xong quay lại trang review, kéo đến khu vực bình luận
+    return redirect(url_for("review") + "#binhluan")
+
 
 
 # ================== Main ==================

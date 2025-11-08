@@ -63,4 +63,22 @@
       renderAuthors();
     })
     .catch(() => {});
+  
+  document.addEventListener("DOMContentLoaded", function () {
+  const nameInput = document.querySelector(".comment-form #name");
+  const contentArea = document.querySelector(".comment-form #content");
+
+  if (nameInput && contentArea) {
+    nameInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();          // không submit form
+        contentArea.focus();         // chuyển focus xuống textarea
+
+        // Đưa con trỏ xuống cuối nội dung (nếu có sẵn)
+        const len = contentArea.value.length;
+        contentArea.setSelectionRange(len, len);
+      }
+    });
+  }
+});
 })();

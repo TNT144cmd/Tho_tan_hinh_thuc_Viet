@@ -39,5 +39,47 @@ Trong bối cảnh toàn cầu hóa và sự chuyển dịch mạnh mẽ của n
     </div>
   </section>
 
+  <!-- 5️⃣ Khu vực bình luận -->
+  <section id="binhluan" class="section" style="padding-top: 40px;">
+    <h2>Những điều muốn nói</h2>
+
+    <!-- Form comment -->
+    <form action="{{ url_for('review_comment') }}" method="post" class="comment-form">
+      <div class="row">
+        <label for="name">Cho mình biết bút danh của bạn nha</label>
+        <input type="text" id="name" name="name" maxlength="60" placeholder="Ẩn danh" />
+      </div>
+      <div class="row">
+        <label for="content">Nhận xét của bạn</label>
+        <textarea id="content" name="content" rows="4" maxlength="2000"
+          placeholder="Chia sẻ cảm nhận của bạn về Thơ Tân hình thức Việt..."
+          class="auto-grow"></textarea>
+      </div>
+      <button type="submit" class="btn">Gửi đánh giá</button>
+    </form>
+
+    <!-- Danh sách comment -->
+    {% if comments and comments|length > 0 %}
+      <ul class="comments" style="margin-top: 18px;">
+        {% for c in comments %}
+          <li class="comment">
+            <div class="comment-name">
+              <strong>{{ c.name or 'Cho mình biết bút danh của bạn nha' }}</strong>
+              {% if c.created_at %}
+                • {{ c.created_at.strftime('%d/%m/%Y %H:%M') }}
+              {% endif %}
+            </div>
+            <div class="comment-meta">
+              {{ c.content }}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted" style="margin-top: 12px;">Chưa có đánh giá nào. Hãy là người đầu tiên chia sẻ!</p>
+    {% endif %}
+  </section>
+
+
 </main>
 {% endblock %}

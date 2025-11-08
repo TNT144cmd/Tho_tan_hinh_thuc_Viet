@@ -22,10 +22,10 @@
       margin-left: auto;
       display: flex; align-items: center; gap: 10px;
       font-size: 0.95rem;
-      color: var(--muted);
+      color: rgb(47, 59, 27);
       white-space: nowrap;
     }
-    .nav-context a { color: var(--muted); text-decoration: none; }
+    .nav-context a { font-size: 0.95rem;color: rgb(47, 59, 27); text-decoration: none; }
     .nav-context a:hover, .nav-context a:focus-visible { color: var(--fg); outline: none; text-decoration: underline; }
     .nav-divider { opacity: 0.6; }
     @media (max-width: 500px){
@@ -55,11 +55,11 @@
             <!-- JS sẽ populate danh sách tác giả + 3 bài mới nhất -->
             <div class="dropdown-inner">
               <div class="poem-preview">
-                <h4>Tất cả tác giả</h4>
+                <h4>Tác giả</h4>
                 <ul class="author-list"><!-- filled by JS --></ul>
               </div>
               <div class="poem-preview">
-                <h4>Các tác phẩm nổi bật</h4>
+                <h4>Tác phẩm</h4>
                 <ul class="poem-list"><!-- filled by JS --></ul>
               </div>
             </div>
